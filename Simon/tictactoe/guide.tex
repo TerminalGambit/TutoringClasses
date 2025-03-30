@@ -1,0 +1,183 @@
+\documentclass{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{parskip}
+
+\definecolor{codegray}{rgb}{0.95,0.95,0.95}
+
+\lstdefinestyle{pythonstyle}{
+    backgroundcolor=\color{codegray},
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{teal},
+    showstringspaces=false,
+    columns=flexible,
+    keepspaces=true,
+    tabsize=4,
+    breaklines=true,
+    frame=single
+}
+
+\titleformat{\section}[block]{\large\bfseries}{}{0em}{}
+\titleformat{\subsection}[block]{\bfseries}{}{0em}{}
+
+\title{Guide to a Simple Pygame Tic-Tac-Toe}
+\author{Jack Massey}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{Overview}
+
+This guide explains a minimalistic Tic-Tac-Toe game built using \texttt{pygame}, a Python library for creating simple games. It uses a 3x3 grid, alternating turns for X and O, and detects winning and draw conditions.
+
+\begin{tcolorbox}[colback=blue!5!white, title=Requirements]
+\begin{itemize}
+    \item Python 3 installed on your system
+    \item Pygame: install using \texttt{pip install pygame}
+    \item Compatible with Windows, macOS, and Linux
+\end{itemize}
+\end{tcolorbox}
+
+\section{Code Breakdown}
+
+\subsection{Setup and Constants}
+
+We import libraries, initialize pygame, and define constants like screen size, colors, and fonts.
+
+\begin{lstlisting}[style=pythonstyle]
+import pygame
+import sys
+
+pygame.init()
+
+WIDTH, HEIGHT = 300, 300
+LINE_WIDTH = 5
+CELL_SIZE = WIDTH // 3
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+\end{lstlisting}
+
+\subsection{Display and State}
+
+We create the game window and set up the initial board and current player.
+
+\begin{lstlisting}[style=pythonstyle]
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("Tic Tac Toe")
+
+board = [["" for _ in range(3)] for _ in range(3)]
+current_player = "X"
+game_over = False
+\end{lstlisting}
+
+\newpage
+
+\subsection{Drawing the Board}
+
+The \texttt{draw\_board} function draws the grid and displays each mark (X or O) on the screen.
+
+\begin{lstlisting}[style=pythonstyle]
+def draw_board():
+    screen.fill(WHITE)
+    for i in range(1, 3):
+        pygame.draw.line(screen, BLACK, (CELL_SIZE * i, 0), (CELL_SIZE * i, HEIGHT), LINE_WIDTH)
+        pygame.draw.line(screen, BLACK, (0, CELL_SIZE * i), (WIDTH, CELL_SIZE * i), LINE_WIDTH)
+
+    for row in range(3):
+        for col in range(3):
+            mark = board[row][col]
+            if mark:
+                text = font.render(mark, True, BLACK)
+                rect = text.get_rect(center=(col * CELL_SIZE + CELL_SIZE // 2, row * CELL_SIZE + CELL_SIZE // 2))
+                screen.blit(text, rect)
+\end{lstlisting}
+
+\subsection{Checking for a Winner or Draw}
+
+Two functions check for victory or a full board (draw):
+
+\begin{lstlisting}[style=pythonstyle]
+def check_winner():
+    for i in range(3):
+        if board[i][0] == board[i][1] == board[i][2] != "":
+            return board[i][0]
+        if board[0][i] == board[1][i] == board[2][i] != "":
+            return board[0][i]
+    if board[0][0] == board[1][1] == board[2][2] != "":
+        return board[0][0]
+    if board[0][2] == board[1][1] == board[2][0] != "":
+        return board[0][2]
+    return None
+
+def is_draw():
+    for row in board:
+        if "" in row:
+            return False
+    return True
+\end{lstlisting}
+
+\subsection{Displaying a Message}
+
+\begin{lstlisting}[style=pythonstyle]
+def show_message(message):
+    text = font.render(message, True, BLACK)
+    rect = text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
+    screen.blit(text, rect)
+    pygame.display.update()
+    pygame.time.wait(2000)
+\end{lstlisting}
+
+\newpage
+
+\subsection{Main Loop}
+
+This is where the game runs: rendering the screen, processing input, and handling logic.
+
+\begin{lstlisting}[style=pythonstyle]
+while True:
+    draw_board()
+    pygame.display.update()
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
+        if not game_over and event.type == pygame.MOUSEBUTTONDOWN:
+            x, y = pygame.mouse.get_pos()
+            row = y // CELL_SIZE
+            col = x // CELL_SIZE
+
+            if board[row][col] == "":
+                board[row][col] = current_player
+                winner = check_winner()
+                if winner:
+                    draw_board()
+                    show_message(f"{winner} wins!")
+                    game_over = True
+                elif is_draw():
+                    draw_board()
+                    show_message("Draw!")
+                    game_over = True
+                else:
+                    current_player = "O" if current_player == "X" else "X"
+\end{lstlisting}
+
+\section{Suggestions for Extensions}
+
+\begin{itemize}
+    \item Add a "Play Again" button or restart key
+    \item Use a class to manage game state
+    \item Add a basic AI for single-player mode
+    \item Display a score counter
+\end{itemize}
+
+\end{document}

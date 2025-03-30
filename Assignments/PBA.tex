@@ -1,0 +1,121 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french,english]{babel}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{tcolorbox}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{lmodern}
+\usepackage{enumitem}
+\usepackage{geometry}
+
+
+\title{Python Learning Path: Project-Based Approach}
+\author{Prepared by Jack Massey}
+\date{}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{gray!10},
+  frame=single,
+  columns=flexible,
+  breaklines=true,
+  showstringspaces=false
+}
+
+\tcbuselibrary{skins, breakable, listings}
+
+\begin{document}
+
+\maketitle
+
+\section*{Learning Strategy}
+The goal is to shift from passive learning to active coding. Each task builds on the previous one and introduces key Python fundamentals step-by-step. The learner is expected to code, test, and reflect on their work.
+
+\bigskip
+
+\begin{tcolorbox}[title=Step-by-Step Progression, colback=blue!10, colframe=blue!40, breakable]
+\begin{itemize}
+    \item \textbf{Mini ATM — Deposit and Withdraw (from scratch)}
+    \begin{itemize}
+        \item Ask the user what they want to do: Deposit / Withdraw / Quit.
+        \item Update the balance according to the action.
+        \item Print the current balance after each action.
+        \item Loop until user quits.
+    \end{itemize}
+
+    \item \textbf{Add Transaction History}
+    \begin{itemize}
+        \item Store each transaction in a list as a string, e.g. \texttt{"Deposit: +50€"}.
+        \item When the user quits, print the list of transactions.
+    \end{itemize}
+
+    \item \textbf{Vending Machine}
+    \begin{itemize}
+        \item Show a menu of items and their prices.
+        \item Ask the user to select one and enter their money.
+        \item If enough: print a success message and return change.
+        \item If not: print an error message.
+    \end{itemize}
+\end{itemize}
+\end{tcolorbox}
+
+\bigskip
+
+\section*{Coding Template for Task 1}
+The following scaffold can help the learner get started:
+
+\begin{lstlisting}[language=Python, caption={Basic ATM Structure}]
+balance = 0
+
+while True:
+    print("What do you want to do?")
+    print("1. Deposit")
+    print("2. Withdraw")
+    print("3. Quit")
+    choice = input("> ")
+
+    if choice == "1":
+        # TODO: Ask for amount and add to balance
+        pass
+
+    elif choice == "2":
+        # TODO: Ask for amount, check if enough, subtract
+        pass
+
+    elif choice == "3":
+        print("Goodbye!")
+        break
+
+    else:
+        print("Invalid option.")
+
+    # TODO: Print current balance
+\end{lstlisting}
+
+\bigskip
+
+\section*{Guiding Questions}
+\begin{tcolorbox}[colback=green!10, colframe=green!40, title=Encourage Thinking]
+\begin{itemize}
+    \item What information does your program need to remember?
+    \item What kind of input do you expect from the user?
+    \item What conditions should trigger each part of the logic?
+    \item How can you organize repeated actions inside a loop?
+    \item What should happen if the user makes a mistake?
+\end{itemize}
+\end{tcolorbox}
+
+\bigskip
+
+\section*{Next Steps}
+Once Task 1 and Task 2 are mastered, gradually introduce:
+\begin{itemize}
+    \item \textbf{Saving data to a file} (with \texttt{open()}, \texttt{write()}, \texttt{readlines()})
+    \item \textbf{Datetime stamps} in transaction history
+    \item \textbf{Modular functions} like \texttt{deposit()}, \texttt{withdraw()}
+    \item (Later) object-oriented structure with a simple \texttt{ATM} class
+\end{itemize}
+
+\end{document}
